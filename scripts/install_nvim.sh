@@ -2,11 +2,16 @@
 # install_nvim.sh - Install neovim with minimal sudo privileges
 
 set -e
-echo "===> Starting neovim installation and configuration"
+
+# Define color codes
+GREEN='\033[1;32m'  # Bold and green
+NC='\033[0m'        # No Color
+
+echo -e "${GREEN}===> Starting neovim installation and configuration${NC}"
 
 # Check and install nvim
 if ! command -v nvim &> /dev/null; then
-    echo "Installing neovim..."
+    echo -e "${GREEN}Installing neovim...${NC}"
     if [[ "$(uname)" == "Darwin" ]]; then
         brew install neovim
     elif [[ "$(uname)" == "Linux" ]]; then
@@ -28,7 +33,7 @@ if ! command -v nvim &> /dev/null; then
             
             # Use appimage-extract (if system supports it)
             if [[ "$(./nvim.appimage --version)" == "CANNOT"* ]]; then
-                echo "Need to extract AppImage..."
+                echo -e "${GREEN}Need to extract AppImage...${NC}"
                 # Download AppImage tools
                 if ! command -v appimagetool &> /dev/null; then
                     curl -LO https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
@@ -56,37 +61,37 @@ if ! command -v nvim &> /dev/null; then
 fi
 
 # Set up nvim configuration directory
-echo "Setting up neovim configuration..."
+echo -e "${GREEN}Setting up neovim configuration...${NC}"
 mkdir -p $HOME/.config
 
 # Backup existing configuration (if exists)
 if [ -d "$HOME/.config/nvim" ]; then
-    echo "Backing up existing nvim configuration..."
+    echo -e "${GREEN}Backing up existing nvim configuration...${NC}"
     mv $HOME/.config/nvim $HOME/.config/nvim.backup.$(date +%Y%m%d%H%M%S)
 fi
 
 # Copy our nvim configuration
 if [ -d "$HOME/.dotfile/nvim" ]; then
-    echo "Copying nvim configuration files..."
+    echo -e "${GREEN}Copying nvim configuration files...${NC}"
     mkdir -p $HOME/.config/nvim
     cp -r $HOME/.dotfile/nvim/* $HOME/.config/nvim/
     
     # Ensure Packer.nvim is installed
     if [ ! -d "$HOME/.local/share/nvim/site/pack/packer/start/packer.nvim" ]; then
-        echo "Installing Packer.nvim..."
+        echo -e "${GREEN}Installing Packer.nvim...${NC}"
         git clone --depth 1 https://github.com/wbthomason/packer.nvim \
             $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
     fi
     
     # Install all plugins
-    echo "Installing nvim plugins..."
+    echo -e "${GREEN}Installing nvim plugins...${NC}"
     nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' || true
     
-    echo "Setting permissions..."
+    echo -e "${GREEN}Setting permissions...${NC}"
     chmod -R u+rw $HOME/.config/nvim
     chmod -R u+rw $HOME/.local/share/nvim
 else
-    echo "No nvim configuration found, installing NvChad as base configuration..."
+    echo -e "${GREEN}No nvim configuration found, installing NvChad as base configuration...${NC}"
     # Clone NvChad
     git clone https://github.com/NvChad/NvChad $HOME/.config/nvim --depth 1
     
@@ -98,13 +103,13 @@ else
         cp -r $HOME/.dotfile/nvim/lua/custom/* $HOME/.config/nvim/lua/custom/
     fi
     
-    echo "Setting permissions..."
+    echo -e "${GREEN}Setting permissions...${NC}"
     chmod -R u+rw $HOME/.config/nvim
     chmod -R u+rw $HOME/.local/share/nvim || true
 fi
 
 # Install dependency tools (ripgrep, fd, etc.)
-echo "Installing ripgrep, fd and other dependencies..."
+echo -e "${GREEN}Installing ripgrep, fd and other dependencies...${NC}"
 if [[ "$(uname)" == "Darwin" ]]; then
     brew install ripgrep fd
 elif [[ "$(uname)" == "Linux" ]]; then
@@ -118,7 +123,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
         
         # Install ripgrep
         if ! command -v rg &> /dev/null; then
-            echo "Installing ripgrep (no sudo)..."
+            echo -e "${GREEN}Installing ripgrep (no sudo)...${NC}"
             curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep-13.0.0-x86_64-unknown-linux-musl.tar.gz
             tar -xzf ripgrep-13.0.0-x86_64-unknown-linux-musl.tar.gz
             cp ripgrep-13.0.0-x86_64-unknown-linux-musl/rg $HOME/local/bin/
@@ -128,7 +133,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
         
         # Install fd
         if ! command -v fd &> /dev/null; then
-            echo "Installing fd (no sudo)..."
+            echo -e "${GREEN}Installing fd (no sudo)...${NC}"
             curl -LO https://github.com/sharkdp/fd/releases/download/v8.4.0/fd-v8.4.0-x86_64-unknown-linux-musl.tar.gz
             tar -xzf fd-v8.4.0-x86_64-unknown-linux-musl.tar.gz
             cp fd-v8.4.0-x86_64-unknown-linux-musl/fd $HOME/local/bin/
@@ -141,5 +146,5 @@ elif [[ "$(uname)" == "Linux" ]]; then
     fi
 fi
 
-echo "===> neovim installation complete!"
-echo "You can run 'nvim' to start using your configuration"
+echo -e "${GREEN}===> neovim installation complete!${NC}"
+echo -e "${GREEN}You can run 'nvim' to start using your configuration${NC}"

@@ -2,11 +2,16 @@
 # install_tmux.sh - Install tmux configuration without sudo privileges
 
 set -e
-echo "===> Starting tmux installation and configuration"
+
+# Define color codes
+GREEN='\033[1;32m'  # Bold and green
+NC='\033[0m'        # No Color
+
+echo -e "${GREEN}===> Starting tmux installation and configuration${NC}"
 
 # Check and install tmux (using Homebrew or local installation)
 if ! command -v tmux &> /dev/null; then
-    echo "Installing tmux..."
+    echo -e "${GREEN}Installing tmux...${NC}"
     if [[ "$(uname)" == "Darwin" ]]; then
         brew install tmux
     elif [[ "$(uname)" == "Linux" ]]; then
@@ -26,7 +31,7 @@ if ! command -v tmux &> /dev/null; then
             
             # Install dependencies
             if ! command -v libevent-config &> /dev/null; then
-                echo "Installing libevent..."
+                echo -e "${GREEN}Installing libevent...${NC}"
                 wget https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
                 tar -xzvf libevent-2.1.12-stable.tar.gz
                 cd libevent-2.1.12-stable
@@ -37,7 +42,7 @@ if ! command -v tmux &> /dev/null; then
             
             # Install ncurses
             if [ ! -d "$HOME/local/include/ncurses" ]; then
-                echo "Installing ncurses..."
+                echo -e "${GREEN}Installing ncurses...${NC}"
                 wget https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.2.tar.gz
                 tar -xzvf ncurses-6.2.tar.gz
                 cd ncurses-6.2
@@ -47,7 +52,7 @@ if ! command -v tmux &> /dev/null; then
             fi
             
             # Install tmux
-            echo "Installing tmux..."
+            echo -e "${GREEN}Installing tmux...${NC}"
             wget https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz
             tar -xzvf tmux-3.2a.tar.gz
             cd tmux-3.2a
@@ -65,13 +70,13 @@ if ! command -v tmux &> /dev/null; then
 fi
 
 # Install Oh My Tmux
-echo "Installing Oh My Tmux..."
+echo -e "${GREEN}Installing Oh My Tmux...${NC}"
 if [ -d "$HOME/.tmux" ]; then
-    echo "Updating existing .tmux..."
+    echo -e "${GREEN}Updating existing .tmux...${NC}"
     cd $HOME/.tmux
     git pull
 else
-    echo "Cloning .tmux repository..."
+    echo -e "${GREEN}Cloning .tmux repository...${NC}"
     git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux
 fi
 
@@ -80,15 +85,15 @@ ln -sf $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
 
 # Copy our custom tmux.conf.local to the correct location or use default
 if [ -f "$HOME/.dotfile/tmux/.tmux.conf.local" ]; then
-    echo "Applying custom tmux configuration..."
+    echo -e "${GREEN}Applying custom tmux configuration...${NC}"
     cp $HOME/.dotfile/tmux/.tmux.conf.local $HOME/
 else
-    echo "Using default .tmux.conf.local..."
+    echo -e "${GREEN}Using default .tmux.conf.local...${NC}"
     cp $HOME/.tmux/.tmux.conf.local $HOME/
     # Make sure directory exists
     mkdir -p "$HOME/.dotfile/tmux"
     cp $HOME/.tmux/.tmux.conf.local $HOME/.dotfile/tmux/
 fi
 
-echo "===> tmux installation complete!"
-echo "You can restart your terminal to apply changes"
+echo -e "${GREEN}===> tmux installation complete!${NC}"
+echo -e "${GREEN}You can restart your terminal to apply changes${NC}"

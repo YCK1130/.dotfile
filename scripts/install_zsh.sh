@@ -2,11 +2,16 @@
 # install_zsh.sh - Install zsh and oh-my-zsh with minimal sudo privileges
 
 set -e
-echo "===> Starting zsh and oh-my-zsh installation"
+
+# Define color codes
+GREEN='\033[1;32m'  # Bold and green
+NC='\033[0m'        # No Color
+
+echo -e "${GREEN}===> Starting zsh and oh-my-zsh installation${NC}"
 
 # Check and install zsh
 if ! command -v zsh &> /dev/null; then
-    echo "Installing zsh..."
+    echo -e "${GREEN}Installing zsh...${NC}"
     if [[ "$(uname)" == "Darwin" ]]; then
         brew install zsh
     elif [[ "$(uname)" == "Linux" ]]; then
@@ -25,7 +30,7 @@ if ! command -v zsh &> /dev/null; then
             cd $HOME/local
             
             # Install zsh
-            echo "Compiling and installing zsh locally..."
+            echo -e "${GREEN}Compiling and installing zsh locally...${NC}"
             wget https://www.zsh.org/pub/zsh-5.8.tar.xz
             tar -xf zsh-5.8.tar.xz
             cd zsh-5.8
@@ -49,20 +54,20 @@ fi
 
 # Install Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "Installing Oh My Zsh..."
+    echo -e "${GREEN}Installing Oh My Zsh...${NC}"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
-    echo "Oh My Zsh already installed"
+    echo -e "${GREEN}Oh My Zsh already installed${NC}"
 fi
 
 # Install powerlevel10k theme
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-    echo "Installing powerlevel10k theme..."
+    echo -e "${GREEN}Installing powerlevel10k theme...${NC}"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
 
 # Install plugins
-echo "Installing zsh plugins..."
+echo -e "${GREEN}Installing zsh plugins...${NC}"
 # zsh-autosuggestions
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -81,7 +86,7 @@ fi
 # Install common tools: try to avoid using sudo
 # Install zoxide
 if ! command -v zoxide &> /dev/null; then
-    echo "Installing zoxide..."
+    echo -e "${GREEN}Installing zoxide...${NC}"
     if [[ "$(uname)" == "Darwin" ]]; then
         brew install zoxide
     elif [[ "$(uname)" == "Linux" ]]; then
@@ -91,13 +96,13 @@ fi
 
 # Install eza (ls replacement)
 if ! command -v eza &> /dev/null; then
-    echo "Installing eza..."
+    echo -e "${GREEN}Installing eza...${NC}"
     sh $HOME/.dotfile/rust/eza_install.sh
 fi
 
 # Install bat (cat replacement)
 if ! command -v bat &> /dev/null; then
-    echo "Installing bat..."
+    echo -e "${GREEN}Installing bat...${NC}"
     if [[ "$(uname)" == "Darwin" ]]; then
         brew install bat
     elif [[ "$(uname)" == "Linux" ]]; then
@@ -109,7 +114,7 @@ if ! command -v bat &> /dev/null; then
 fi
 
 # Copy configuration files
-echo "Setting up zsh configuration..."
+echo -e "${GREEN}Setting up zsh configuration...${NC}"
 cp $HOME/.dotfile/zsh/.zshrc $HOME/
 # If .zshrc.local exists in .dotfile, copy it
 if [ -f "$HOME/.dotfile/zsh/.zshrc.local" ]; then
@@ -125,7 +130,7 @@ fi
 
 # Try to set zsh as default shell without using sudo
 if [[ "$SHELL" != *"zsh"* ]]; then
-    echo "Setting zsh as default shell..."
+    echo -e "${GREEN}Setting zsh as default shell...${NC}"
     if command -v chsh &> /dev/null; then
         chsh -s $(which zsh)
     else
@@ -134,5 +139,5 @@ if [[ "$SHELL" != *"zsh"* ]]; then
     fi
 fi
 
-echo "===> zsh and oh-my-zsh installation complete!"
-echo "Please restart your terminal or run 'source ~/.zshrc' to apply changes"
+echo -e "${GREEN}===> zsh and oh-my-zsh installation complete!${NC}"
+echo -e "${GREEN}Please restart your terminal or run 'source ~/.zshrc' to apply changes${NC}"

@@ -1,29 +1,33 @@
 #!/bin/bash
 # eza installation script with if-else structure
 
+# Define color codes
+GREEN='\033[1;32m'  # Bold and green
+NC='\033[0m'        # No Color
+
 # Detect operating system
 if [[ "$(uname)" == "Darwin" ]]; then
-    echo "macOS detected, installing eza via Homebrew..."
+    echo -e "${GREEN}macOS detected, installing eza via Homebrew...${NC}"
     if command -v brew &> /dev/null; then
         brew install eza
     else
-        echo "Homebrew not found. Installing Homebrew first..."
+        echo -e "${GREEN}Homebrew not found. Installing Homebrew first...${NC}"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         brew install eza
     fi
 elif [[ "$(uname)" == "Linux" ]]; then
-    echo "Linux detected. Checking installation methods..."
+    echo -e "${GREEN}Linux detected. Checking installation methods...${NC}"
     
     # Check if Rust/Cargo is available
     if command -v cargo &> /dev/null; then
-        echo "Rust environment detected, installing eza via cargo..."
+        echo -e "${GREEN}Rust environment detected, installing eza via cargo...${NC}"
         cargo install eza
     else
-        echo "Rust not found. Attempting to install via package repositories..."
+        echo -e "${GREEN}Rust not found. Attempting to install via package repositories...${NC}"
         
         # Check distribution
         if command -v apt &> /dev/null; then
-            echo "Debian/Ubuntu detected, installing via apt..."
+            echo -e "${GREEN}Debian/Ubuntu detected, installing via apt...${NC}"
             
             # First make sure you have gpg
             sudo apt update
@@ -37,13 +41,13 @@ elif [[ "$(uname)" == "Linux" ]]; then
             sudo apt update
             sudo apt install -y eza
         elif command -v dnf &> /dev/null; then
-            echo "Fedora/RHEL detected, installing via dnf..."
+            echo -e "${GREEN}Fedora/RHEL detected, installing via dnf...${NC}"
             sudo dnf install -y eza
         elif command -v pacman &> /dev/null; then
-            echo "Arch Linux detected, installing via pacman..."
+            echo -e "${GREEN}Arch Linux detected, installing via pacman...${NC}"
             sudo pacman -S eza
         else
-            echo "Unable to determine package manager. Installing Rust and then eza via cargo..."
+            echo -e "${GREEN}Unable to determine package manager. Installing Rust and then eza via cargo...${NC}"
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             source "$HOME/.cargo/env"
             cargo install eza
@@ -55,5 +59,5 @@ else
     exit 1
 fi
 
-echo "eza installation completed. You can now use 'eza' command instead of 'ls'."
-echo "Try: eza --long --header --git"
+echo -e "${GREEN}eza installation completed. You can now use 'eza' command instead of 'ls'.${NC}"
+echo -e "${GREEN}Try: eza --long --header --git${NC}"
