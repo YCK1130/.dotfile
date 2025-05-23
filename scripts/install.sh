@@ -24,21 +24,21 @@ read -p "Enter option [1-4]: " CHOICE
 case $CHOICE in
     1)
         echo "Installing all modules..."
-        $DOTFILE_DIR/install_tmux.sh
-        $DOTFILE_DIR/install_zsh.sh
-        $DOTFILE_DIR/install_nvim.sh
+        $DOTFILE_DIR/scripts/install_tmux.sh
+        $DOTFILE_DIR/scripts/install_zsh.sh
+        $DOTFILE_DIR/scripts/install_nvim.sh
         ;;
     2)
         echo "Installing tmux only..."
-        $DOTFILE_DIR/install_tmux.sh
+        $DOTFILE_DIR/scripts/install_tmux.sh
         ;;
     3)
         echo "Installing zsh and oh-my-zsh only..."
-        $DOTFILE_DIR/install_zsh.sh
+        $DOTFILE_DIR/scripts/install_zsh.sh
         ;;
     4)
         echo "Installing neovim only..."
-        $DOTFILE_DIR/install_nvim.sh
+        $DOTFILE_DIR/scripts/install_nvim.sh
         ;;
     *)
         echo "Invalid option, exiting installation"
