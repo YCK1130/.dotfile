@@ -1,0 +1,28 @@
+# Language settings
+export LANG=en_US.UTF-8
+
+# Aliases
+alias vim=nvim
+alias cat=bat
+alias l='eza'
+alias ls='eza --icons always'
+alias la='eza --icons always -a'
+alias ll='eza --icons always -lg'
+alias lla='eza --icons always -lga'
+alias c='clear'
+
+alias ccp="copypath"
+alias cf="copyfile"
+alias cbuff="copybuffer"
+
+# Function for opening VS Code
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args "$@" ;}
+
+# Additional PATHs
+
+export GPG_TTY=$tty
+export ANDROID_SDK="$HOME/Library/Android/sdk"
+export GOPATH=/opt/homebrew/Cellar/go/1.22.4/
+export PATH="$HOME/.yarn/bin:$HOME/flutter/bin:$HOME/Library/pnpm:$GOPATH/bin:$GOROOT/bin:/usr/local/texlive/2023/bin/universal-darwin:/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/opt/go@1.22/bin:$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$PATH"
+
+
