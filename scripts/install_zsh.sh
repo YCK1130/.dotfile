@@ -92,14 +92,7 @@ fi
 # Install eza (ls replacement)
 if ! command -v eza &> /dev/null; then
     echo "Installing eza..."
-    if [[ "$(uname)" == "Darwin" ]]; then
-        brew install eza
-    elif [[ "$(uname)" == "Linux" ]]; then
-        # Download precompiled binary
-        mkdir -p $HOME/local/bin
-        curl -sSL https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz | tar -xz -C $HOME/local/bin
-        echo 'export PATH="$HOME/local/bin:$PATH"' >> $HOME/.zshrc.local
-    fi
+    sh $HOME/.dotfile/rust/eza_install.sh
 fi
 
 # Install bat (cat replacement)
