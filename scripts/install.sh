@@ -9,9 +9,9 @@ DOTFILE_DIR="$HOME/.dotfile"
 cd $DOTFILE_DIR
 
 # Ensure scripts have execution permissions
-chmod +x $DOTFILE_DIR/install_tmux.sh
-chmod +x $DOTFILE_DIR/install_zsh.sh
-chmod +x $DOTFILE_DIR/install_nvim.sh
+chmod +x $DOTFILE_DIR/scripts/install_tmux.sh
+chmod +x $DOTFILE_DIR/scripts/install_zsh.sh
+chmod +x $DOTFILE_DIR/scripts/install_nvim.sh
 
 # Ask user which modules to install
 echo "Please select which modules to install:"
