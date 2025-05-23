@@ -5,6 +5,8 @@ set -e
 
 # Define color codes
 GREEN='\033[1;32m'  # Bold and green
+YELLOW='\033[1;33m' # Bold and yellow
+RED='\033[1;31m'    # Bold and red
 NC='\033[0m'        # No Color
 
 echo -e "${GREEN}===> Starting zsh and oh-my-zsh installation${NC}"
@@ -131,13 +133,67 @@ fi
 # Try to set zsh as default shell without using sudo
 if [[ "$SHELL" != *"zsh"* ]]; then
     echo -e "${GREEN}Setting zsh as default shell...${NC}"
+    
+    # First attempt with chsh
     if command -v chsh &> /dev/null; then
-        chsh -s $(which zsh)
+        echo -e "${YELLOW}Attempting to use chsh (you may be prompted for your password)...${NC}"
+        if chsh -s $(which zsh); then
+            echo -e "${GREEN}Successfully set zsh as default shell!${NC}"
+        else
+            echo -e "${RED}Failed to set zsh as default shell using chsh.${NC}"
+            echo -e "${YELLOW}Alternative methods to set zsh as default shell:${NC}"
+            
+            # Check if we're on macOS
+            if [[ "$(uname)" == "Darwin" ]]; then
+                echo -e "1. Open System Preferences → Users & Groups → Right-click on your account → Advanced Options → Change login shell to $(which zsh)"
+            fi
+            
+            echo -e "2. Add this line to your ~/.bash_profile or ~/.profile:"
+            echo -e "   ${GREEN}[ -f $(which zsh) ] && exec $(which zsh) -l${NC}"
+            
+            # Create a setup file for alternative shell change
+            echo "#!/bin/bash" > $HOME/.set_zsh_shell.sh
+            echo "# This script will help you set zsh as your default shell" >> $HOME/.set_zsh_shell.sh
+            echo "[ -f $(which zsh) ] && exec $(which zsh) -l" >> $HOME/.set_zsh_shell.sh
+            chmod +x $HOME/.set_zsh_shell.sh
+            
+            echo -e "3. Run this command to try again with sudo (if you have sudo access):"
+            echo -e "   ${GREEN}sudo chsh -s $(which zsh) $USER${NC}"
+            
+            echo -e "\nA helper script has been created at $HOME/.set_zsh_shell.sh"
+            echo -e "You can add its contents to your ~/.bash_profile or ~/.profile"
+        fi
     else
-        echo "Cannot automatically set zsh as default shell. After installation, please run:"
-        echo "chsh -s $(which zsh)"
+        echo "chsh command not found. Please set your default shell manually:"
+        echo "1. Add the following line to your ~/.bash_profile or ~/.profile:"
+        echo "   [ -f $(which zsh) ] && exec $(which zsh) -l"
     fi
+fi
+
+# Add zsh init to bash_profile for users who can't change their login shell
+if [[ "$(uname)" == "Darwin" ]] && [[ "$SHELL" != *"zsh"* ]]; then
+    echo -e "${YELLOW}Adding zsh initialization to .bash_profile as a fallback...${NC}"
+    if [ -f "$HOME/.bash_profile" ]; then
+        if ! grep -q "exec zsh" "$HOME/.bash_profile"; then
+            echo -e "\n# Start zsh if it exists" >> "$HOME/.bash_profile"
+            echo "[ -f $(which zsh) ] && exec $(which zsh) -l" >> "$HOME/.bash_profile"
+        fi
+    else
+        echo "# Start zsh if it exists" > "$HOME/.bash_profile"
+        echo "[ -f $(which zsh) ] && exec $(which zsh) -l" >> "$HOME/.bash_profile"
+    fi
+    echo -e "${GREEN}Added zsh initialization to .bash_profile${NC}"
+fi
+
+# Ensure zoxide initialization is in .zshrc
+if ! grep -q "zoxide init" "$HOME/.zshrc"; then
+    echo -e "${YELLOW}Adding zoxide initialization to .zshrc...${NC}"
+    echo 'eval "$(zoxide init zsh)"' >> "$HOME/.zshrc"
+    echo -e "${GREEN}Added zoxide initialization${NC}"
 fi
 
 echo -e "${GREEN}===> zsh and oh-my-zsh installation complete!${NC}"
 echo -e "${GREEN}Please restart your terminal or run 'source ~/.zshrc' to apply changes${NC}"
+if [[ "$SHELL" != *"zsh"* ]]; then
+    echo -e "${YELLOW}To start using zsh right now, simply type: ${GREEN}zsh${NC}"
+fi
