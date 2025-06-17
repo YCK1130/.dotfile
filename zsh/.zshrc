@@ -23,7 +23,7 @@ plugins=(
   zsh-syntax-highlighting
   copypath copyfile copybuffer
   zsh-history-substring-search
-  zoxide
+  # zoxide
 )
 
 # plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search vi-mode )
@@ -36,7 +36,7 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 export YSU_MESSAGE_POSITION="after"
 export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=(bg=none,fg=cyan,bold)
 source $ZSH/oh-my-zsh.sh
-# eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh)"
 ##################################### ohmyzsh configure end #####################################
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

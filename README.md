@@ -11,7 +11,7 @@ This repository contains my personal dotfiles for setting up a development envir
 Clone this repository to your home directory:
 
 ```bash
-git clone https://github.com/yourusername/dotfiles.git ~/.dotfile
+git clone https://github.com/YCK1130/.dotfile.git ~/.dotfile
 ```
 
 Run the installer:

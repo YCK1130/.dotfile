@@ -17,6 +17,7 @@ cd $DOTFILE_DIR
 chmod +x $DOTFILE_DIR/scripts/install_tmux.sh
 chmod +x $DOTFILE_DIR/scripts/install_zsh.sh
 chmod +x $DOTFILE_DIR/scripts/install_nvim.sh
+chmod +x $DOTFILE_DIR/scripts/set_git_alias.sh
 
 # Ask user which modules to install
 echo -e "${GREEN}Please select which modules to install:${NC}"
@@ -24,6 +25,7 @@ echo "1) Install all (tmux, zsh/oh-my-zsh, neovim)"
 echo "2) Install tmux only"
 echo "3) Install zsh and oh-my-zsh only"
 echo "4) Install neovim only"
+echo "5) Install git alias only"
 read -p "Enter option [1-4]: " CHOICE
 
 case $CHOICE in
@@ -32,6 +34,7 @@ case $CHOICE in
         $DOTFILE_DIR/scripts/install_tmux.sh
         $DOTFILE_DIR/scripts/install_zsh.sh
         $DOTFILE_DIR/scripts/install_nvim.sh
+        $DOTFILE_DIR/scripts/set_git_alias.sh
         ;;
     2)
         echo -e "${GREEN}Installing tmux only...${NC}"
@@ -44,6 +47,10 @@ case $CHOICE in
     4)
         echo -e "${GREEN}Installing neovim only...${NC}"
         $DOTFILE_DIR/scripts/install_nvim.sh
+        ;;
+    5)
+        echo -e "${GREEN}Installing git alias only...${NC}"
+        $DOTFILE_DIR/scripts/set_git_alias.sh
         ;;
     *)
         echo "Invalid option, exiting installation"

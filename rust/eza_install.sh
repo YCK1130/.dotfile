@@ -49,6 +49,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
         else
             echo -e "${GREEN}Unable to determine package manager. Installing Rust and then eza via cargo...${NC}"
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+            echo ". $HOME/.cargo/env" >> $HOME/.zshrc
             source "$HOME/.cargo/env"
             cargo install eza
         fi
